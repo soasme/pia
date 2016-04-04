@@ -28,6 +28,12 @@ def builtin_jq():
     return resp
 
 # route: builtin echo
+@app.route('/builtin/echo', methods=['POST'])
+def builtin_echo():
+    resp = make_response(request.data)
+    resp.content_type = request.content_type
+    return resp
+
 # route: setenv
 # route: printenv
 
