@@ -4,3 +4,4 @@ PyYAML
 celery
 redis
 gunicorn
+click

@@ -20,6 +20,7 @@ requirements = [
     'PyYAML',
     'celery',
     'redis',
+    'click',
 ]
 
 test_requirements = [
