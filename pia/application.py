@@ -25,8 +25,8 @@ def builtin_jq():
         resp = make_response(data)
         resp.content_type = 'application/json'
         return resp
-    except InvalidJQFilter as e:
-        return jsonify(message=e), 400
+    except InvalidJQFilter as exception:
+        return jsonify(message=str(exception)), 400
 
 @app.route('/builtin/echo', methods=['POST'])
 def builtin_echo():
