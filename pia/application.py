@@ -68,24 +68,19 @@ celery.conf.update(
     CELERY_RESULT_BACKEND='redis://'
 )
 
+from .program import run_job, ServerReject, ServerError, BrokenProgram, CallFailed
 from pia.utils import formatenv
 
 @celery.task
-def prog_runner(input, prog):
+def prog_runner(jsondata, program):
     """
     A celery task to run program.
     """
-    prog = formatenv(prog, ENV)
-    prog['json'] = input
-    prog.pop('data', None)
-    method = prog.pop('method', 'post').lower()
-    resp = getattr(requests, method)(**prog)
-    if not resp.status_code == 200:
-        return json.dumps({'message': resp.content}), 400
     try:
-        return resp.json()
-    except:
-        return {'_': resp.content}
+        return run_job(jsondata, program, ENV)
+    except (BrokenProgram, CallFailed, ServerError, ServerReject) as exception:
+        return dict(message=str(exception))
+
 
 @app.route('/<username>/<program>', methods=['POST'])
 def run_prog(username, program):
@@ -95,12 +90,15 @@ def run_prog(username, program):
     detach = request.args.get('detach')
     program = _load_program(username, program)
     pipe = program['pipe']
-    tasks = []
     if not pipe:
         abort(400)
+
+    tasks = []
+
     tasks.append(prog_runner.s(request.json, pipe[0]))
     for prog in program['pipe'][1:]:
         tasks.append(prog_runner.s(prog))
+
     res = chain(*tasks)()
     if detach:
         return jsonify(state='triggered')
