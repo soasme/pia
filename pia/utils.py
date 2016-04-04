@@ -1,4 +1,10 @@
 # -*- coding: utf-8 -*-
+"""
+Pia utils
+~~~~~~~~~~~~~~~
+
+Utility functions for pia.
+"""
 
 import re
 
@@ -6,22 +12,15 @@ ENV_PLACEHODLER = re.compile(r'{{\s?\$(\w+)\s?}}')
 
 def formatenv(data, env):
     """
-    >>> formatenv(1, {})
-    1
-    >>> formatenv('1', {})
-    '1'
-    >>> formatenv("{{$TOKEN}}", {})
-    ''
-    >>> formatenv("{{$TOKEN}}", {"TOKEN": "secretkey"})
-    'secretkey'
-    >>> formatenv("{{ $TOKEN }}", {"TOKEN": "secretkey"})
-    'secretkey'
-    >>> formatenv("Bearer {{ $TOKEN }}", {"TOKEN": "secretkey"})
-    'Bearer secretkey'
-    >>> formatenv(['{{$K}}'], {'K': 'V'})
-    ['V']
-    >>> formatenv({'{{$K}}': 'K'}, {'K': 'V'})
-    {'V': 'K'}
+    Format data with given env.
+
+    :param data: a string/integer/float/boolean/list/dict object.
+    :param env: a dictionary.
+    :return: return formatted data.
+
+    `formatenv` will try to format strings contained env placeholder `{{ $ENV_KEY }}`.
+
+    If `ENV_KEY` does not exist in env, then this key will be formatted to empty string.
     """
     if isinstance(data, list):
         return [formatenv(datum, env) for datum in data]
@@ -37,7 +36,3 @@ def formatenv(data, env):
         )
     else:
         return data
-
-if __name__ == "__main__":
-    import doctest
-    doctest.testmod()
