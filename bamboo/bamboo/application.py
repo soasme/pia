@@ -68,6 +68,9 @@ celery.conf.update(
 
 @celery.task
 def prog_runner(input, prog):
+    """
+    A celery task to run program.
+    """
     prog = dict(prog)
     prog['json'] = input
     prog.pop('data', None)
@@ -82,6 +85,9 @@ def prog_runner(input, prog):
 
 @app.route('/<username>/<program>', methods=['POST'])
 def run_prog(username, program):
+    """
+    Run a pipe program
+    """
     detach = request.args.get('detach')
     program = _load_program(username, program)
     pipe = program['pipe']
