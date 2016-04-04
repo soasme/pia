@@ -27,23 +27,23 @@ test_requirements = [
 ]
 
 setup(
-    name='bamboo',
+    name='pia',
     version='0.1.0',
-    description="Not written yet.",
+    description="Chaining http requests into one call.",
     long_description=readme + '\n\n' + history,
     author="Ju Lin",
     author_email='soasme@gmail.com',
-    url='https://github.com/soasme/bamboo',
+    url='https://github.com/soasme/pia',
     packages=[
-        'bamboo',
+        'pia',
     ],
-    package_dir={'bamboo':
-                 'bamboo'},
+    package_dir={'pia':
+                 'pia'},
     include_package_data=True,
     install_requires=requirements,
     license="ISCL",
     zip_safe=False,
-    keywords='bamboo',
+    keywords='pia',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',

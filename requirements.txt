@@ -3,3 +3,4 @@ requests
 PyYAML
 celery
 redis
+gunicorn
