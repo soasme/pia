@@ -21,19 +21,22 @@ Not written yet.
 Quick Start
 -----------
 
-    $ curl -H"content-type: application/json" -d '{"message":"hello world"}' -X POST "http://127.0.0.1:8000/soasme/weather?city=beijing"
-    {"title": "Yahoo! Weather for Beijing, Beijing, CN", "wind": "3.0555555555555554", "forcast": "Sunny"}
+Example::
+
     $ cat programs/soasme/weather.yml
     pipe:
     - method: get
-        url: https://query.yahooapis.com/v1/public/yql
-        params:
+      url: https://query.yahooapis.com/v1/public/yql
+      params:
         format: json
         q: 'select * from weather.forecast where woeid in (select woeid from geo.places(1) where text="beijing")'
     - method: post
-        url: http://127.0.0.1:8000/builtin/jq
-        params:
+      url: http://127.0.0.1:8000/builtin/jq
+      params:
         program: '.query.results.channel|{title:.description,wind:.wind.speed|tonumber|(./3.60)|tostring,forcast:.item.forecast[0].text}'
+
+    $ curl -H"content-type: application/json" -d '{"message":"hello world"}' -X POST "http://127.0.0.1:8000/soasme/weather?city=beijing"
+    {"title": "Yahoo! Weather for Beijing, Beijing, CN", "wind": "3.0555555555555554", "forcast": "Sunny"}
 
 
 Features
