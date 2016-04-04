@@ -2,15 +2,13 @@
 
 # wsgi application: flask app
 from flask import Flask
+import yaml
+
 app = Flask(__name__)
 
-# db support: flask-sqlalchemy integrated
-# mq support: celery integrated
-# user support: flask-user integrated
-# oauth support: flask-oauthlib integrated
-# default user: builtin
+with open('.env') as f:
+    ENV = yaml.load(f.read())
 
-# route: builtin jq
 from flask import request, make_response
 @app.route('/builtin/jq', methods=['POST'])
 def builtin_jq():
@@ -28,9 +26,12 @@ def builtin_jq():
     resp.content_type = 'application/json'
     return resp
 
-# route: builtin echo
 @app.route('/builtin/echo', methods=['POST'])
 def builtin_echo():
+    """
+    Builtin program: `echo`.
+    It will response form data.
+    """
     resp = make_response(request.data)
     resp.content_type = request.content_type
     return resp
@@ -46,7 +47,6 @@ def builtin_echo():
 # route: trigger prog
 
 def _load_program(username, program):
-    import yaml
     with open('./programs/%s/%s.yml' % (username, program)) as f:
         data = f.read()
         data = yaml.load(data)
@@ -66,12 +66,14 @@ celery.conf.update(
     CELERY_RESULT_BACKEND='redis://'
 )
 
+from bamboo.utils import formatenv
+
 @celery.task
 def prog_runner(input, prog):
     """
     A celery task to run program.
     """
-    prog = dict(prog)
+    prog = formatenv(prog, ENV)
     prog['json'] = input
     prog.pop('data', None)
     method = prog.pop('method', 'post').lower()
