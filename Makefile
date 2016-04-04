@@ -46,7 +46,7 @@ clean-test:
 	rm -fr htmlcov/
 
 lint:
-	flake8 bamboo tests
+	flake8 pia tests
 
 test:
 	python setup.py test
@@ -55,15 +55,15 @@ test-all:
 	tox
 
 coverage:
-	coverage run --source bamboo setup.py test
+	coverage run --source pia setup.py test
 	coverage report -m
 	coverage html
 	$(BROWSER) htmlcov/index.html
 
 docs:
-	rm -f docs/bamboo.rst
+	rm -f docs/pia.rst
 	rm -f docs/modules.rst
-	sphinx-apidoc -o docs/ bamboo
+	sphinx-apidoc -o docs/ pia
 	$(MAKE) -C docs clean
 	$(MAKE) -C docs html
 	$(BROWSER) docs/_build/html/index.html

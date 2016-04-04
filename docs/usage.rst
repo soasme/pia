@@ -2,6 +2,6 @@
 Usage
 =====
 
-To use bamboo in a project::
+To use pia in a project::
 
-    import bamboo
+    import pia

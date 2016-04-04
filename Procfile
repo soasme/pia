@@ -1,3 +1,3 @@
 redis: redis-server
-worker: celery -A bamboo.application.celery worker --loglevel=info
-web: gunicorn bamboo.application:app -w 2 --error-log -
+worker: celery -A pia.application.celery worker --loglevel=info
+web: gunicorn pia.application:app -w 2 --error-log -

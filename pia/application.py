@@ -66,7 +66,7 @@ celery.conf.update(
     CELERY_RESULT_BACKEND='redis://'
 )
 
-from bamboo.utils import formatenv
+from pia.utils import formatenv
 
 @celery.task
 def prog_runner(input, prog):

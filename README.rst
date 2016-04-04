@@ -1,22 +1,22 @@
 ===============================
-bamboo
+pia
 ===============================
 
-.. image:: https://img.shields.io/pypi/v/bamboo.svg
-        :target: https://pypi.python.org/pypi/bamboo
+.. image:: https://img.shields.io/pypi/v/pia.svg
+        :target: https://pypi.python.org/pypi/pia
 
-.. image:: https://img.shields.io/travis/soasme/bamboo.svg
-        :target: https://travis-ci.org/soasme/bamboo
+.. image:: https://img.shields.io/travis/soasme/pia.svg
+        :target: https://travis-ci.org/soasme/pia
 
-.. image:: https://readthedocs.org/projects/bamboo/badge/?version=latest
-        :target: https://readthedocs.org/projects/bamboo/?badge=latest
+.. image:: https://readthedocs.org/projects/pia/badge/?version=latest
+        :target: https://readthedocs.org/projects/pia/?badge=latest
         :alt: Documentation Status
 
 
 Not written yet.
 
 * Free software: ISC license
-* Documentation: https://bamboo.readthedocs.org.
+* Documentation: https://pia.readthedocs.org.
 
 Quick Start
 -----------

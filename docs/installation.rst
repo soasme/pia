@@ -6,9 +6,9 @@ Installation
 
 At the command line::
 
-    $ easy_install bamboo
+    $ easy_install pia
 
 Or, if you have virtualenvwrapper installed::
 
-    $ mkvirtualenv bamboo
-    $ pip install bamboo
+    $ mkvirtualenv pia
+    $ pip install pia

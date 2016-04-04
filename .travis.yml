@@ -28,5 +28,5 @@ deploy:
     secure: PLEASE_REPLACE_ME
   on:
     tags: true
-    repo: soasme/bamboo
+    repo: soasme/pia
     condition: $TOXENV == py27
