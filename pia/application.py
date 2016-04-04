@@ -10,21 +10,23 @@ with open('.env') as f:
     ENV = yaml.load(f.read())
 
 from flask import request, make_response
+from .builtin.jq import jq, InvalidJQFilter
+
 @app.route('/builtin/jq', methods=['POST'])
 def builtin_jq():
     """
     Builtin program: `jq`.
     It will run a `jq` progress and return a json object.
     """
-    import subprocess
     program = request.args.get('program', ".")
-    data = request.data
-    cmd = ['jq', program]
-    prog = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-    out, err = prog.communicate(input=data)
-    resp = make_response(out)
-    resp.content_type = 'application/json'
-    return resp
+    command = request.data
+    try:
+        data = jq(program, command)
+        resp = make_response(data)
+        resp.content_type = 'application/json'
+        return resp
+    except InvalidJQFilter as e:
+        return jsonify(message=e), 400
 
 @app.route('/builtin/echo', methods=['POST'])
 def builtin_echo():
@@ -79,7 +81,7 @@ def prog_runner(input, prog):
     method = prog.pop('method', 'post').lower()
     resp = getattr(requests, method)(**prog)
     if not resp.status_code == 200:
-        abort(400)
+        return json.dumps({'message': resp.content}), 400
     try:
         return resp.json()
     except:
