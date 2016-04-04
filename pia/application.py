@@ -57,58 +57,43 @@ def _load_program(username, program):
 from flask import abort, jsonify
 import os
 from celery import chain
-from celery import Celery
 import requests
 import json
 import logging
 logging.getLogger("urllib3").setLevel(logging.DEBUG)
 
-celery = Celery('app', broker='redis://')
+from .core import celery
+
 celery.conf.update(
-    CELERY_RESULT_BACKEND='redis://'
+    BROKER_URL='redis://',
+    CELERY_RESULT_BACKEND='redis://',
 )
 
-from .program import run_job, ServerReject, ServerError, BrokenProgram, CallFailed
-from pia.utils import formatenv
 
-@celery.task
-def prog_runner(jsondata, program):
-    """
-    A celery task to run program.
-    """
-    try:
-        return run_job(jsondata, program, ENV)
-    except (BrokenProgram, CallFailed, ServerError, ServerReject) as exception:
-        return dict(message=str(exception))
-
+from .program import async_run_pipe
 
 @app.route('/<username>/<program>', methods=['POST'])
 def run_prog(username, program):
     """
     Run a pipe program
     """
-    detach = request.args.get('detach')
+    foreground = request.args.get('foreground', type=int, default=0)
+
     program = _load_program(username, program)
     pipe = program['pipe']
     if not pipe:
         abort(400)
 
-    tasks = []
+    async_result = async_run_pipe(request.json, program['pipe'], ENV)
 
-    tasks.append(prog_runner.s(request.json, pipe[0]))
-    for prog in program['pipe'][1:]:
-        tasks.append(prog_runner.s(prog))
+    if foreground:
+        data = async_result.get(timeout=60)
+        resp = make_response(json.dumps(data))
+        resp.content_type = 'application/json'
+        return resp
 
-    res = chain(*tasks)()
-    if detach:
-        return jsonify(state='triggered')
-    try:
-        data = res.get(timeout=30)
-    except Exception as e:
-        raise e
-    resp = make_response(json.dumps(data))
-    resp.content_type = 'application/json'
-    return resp
+    return jsonify(task_id=async_result.id)
+
 
 # errorhandler: ProgAbort
 
