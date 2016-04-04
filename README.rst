@@ -13,26 +13,30 @@ pia
         :alt: Documentation Status
 
 
-~ What is Pia?
+What is Pia?
+--------------------------
 
-  Pia is a tool running pipelines of RESTful services.
-  Pia aggregates a set of requests chained by their
-  HTTP bodies, so that the output of each response
-  feeds directly as input to next request.
+Pia is a tool running pipelines of RESTful services.
+Pia aggregates a set of requests chained by their
+HTTP bodies, so that the output of each response
+feeds directly as input to next request.
 
-~ What is Pia's philosophy?
+What is Pia's philosophy?
+--------------------------
 
-  Obviously, Pia is influenced by Unix philosophy.
-  Pipeline, `Do One Thing and Do It Well`,
-  `Choose portability over efficiency`, etc.
+Obviously, Pia is influenced by Unix philosophy.
+Pipeline, `Do One Thing and Do It Well`,
+`Choose portability over efficiency`, etc.
 
-~ How to use Pia?
+How to use Pia?
+--------------------------
 
-  Pia provides you a command-line application after
-  installing by `pip install pia`. Check the docs
-  for complete installation and usage instructions.
+Pia provides you a command-line application after
+installing by `pip install pia`. Check the docs
+for complete installation and usage instructions.
 
-~ Where are the docs?
+Where are the docs?
+--------------------------
 
-  Go to http://pythonhosted.org/pia for a prebuilt
-  version of the current documentation.
+Go to http://pythonhosted.org/pia for a prebuilt
+version of the current documentation.
