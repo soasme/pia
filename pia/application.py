@@ -10,33 +10,9 @@ with open('.env') as f:
     ENV = yaml.load(f.read())
 
 from flask import request, make_response
-from .builtin.jq import jq, InvalidJQFilter
+from .views import builtin_bp
 
-@app.route('/builtin/jq', methods=['POST'])
-def builtin_jq():
-    """
-    Builtin program: `jq`.
-    It will run a `jq` progress and return a json object.
-    """
-    program = request.args.get('program', ".")
-    command = request.data
-    try:
-        data = jq(program, command)
-        resp = make_response(data)
-        resp.content_type = 'application/json'
-        return resp
-    except InvalidJQFilter as exception:
-        return jsonify(message=str(exception)), 400
-
-@app.route('/builtin/echo', methods=['POST'])
-def builtin_echo():
-    """
-    Builtin program: `echo`.
-    It will response form data.
-    """
-    resp = make_response(request.data)
-    resp.content_type = request.content_type
-    return resp
+app.register_blueprint(builtin_bp, url_prefix='/builtin')
 
 # route: setenv
 # route: printenv
