@@ -1,4 +1,10 @@
 # -*- coding: utf-8 -*-
+"""
+pia.blueprints.builtin.view
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Implement builtin view functions.
+"""
 
 from flask import request
 from flask import make_response

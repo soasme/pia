@@ -1,4 +1,10 @@
 # -*- coding: utf-8 -*-
+"""
+pia.blueprints.builtin.jq
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Implement jq program.
+"""
 
 import subprocess
 
