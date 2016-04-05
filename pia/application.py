@@ -10,9 +10,10 @@ with open('.env') as f:
     ENV = yaml.load(f.read())
 
 from flask import request, make_response
-from .views import builtin_bp
 
-app.register_blueprint(builtin_bp, url_prefix='/builtin')
+from .blueprints.builtin import builtin
+from .blueprints.builtin import view
+app.register_blueprint(builtin, url_prefix='/builtin')
 
 # route: setenv
 # route: printenv
