@@ -6,14 +6,14 @@ import yaml
 
 app = Flask(__name__)
 
-with open('.env') as f:
-    ENV = yaml.load(f.read())
-
 from flask import request, make_response
 
-from .blueprints.builtin import builtin
-from .blueprints.builtin import view
+from pia.blueprints.builtin import builtin
+from pia.blueprints.builtin import view
 app.register_blueprint(builtin, url_prefix='/builtin')
+
+from pia.blueprints.userprogram import bp
+app.register_blueprint(bp)
 
 # route: setenv
 # route: printenv
@@ -39,37 +39,13 @@ import json
 import logging
 logging.getLogger("urllib3").setLevel(logging.DEBUG)
 
-from .core import celery
+from pia.core import celery
 
 celery.conf.update(
     BROKER_URL='redis://',
     CELERY_RESULT_BACKEND='redis://',
 )
 
-
-from .program import async_run_pipe
-
-@app.route('/<username>/<program>', methods=['POST'])
-def run_prog(username, program):
-    """
-    Run a pipe program
-    """
-    foreground = request.args.get('foreground', type=int, default=0)
-
-    program = _load_program(username, program)
-    pipe = program['pipe']
-    if not pipe:
-        abort(400)
-
-    async_result = async_run_pipe(request.json, program['pipe'], ENV)
-
-    if foreground:
-        data = async_result.get(timeout=60)
-        resp = make_response(json.dumps(data))
-        resp.content_type = 'application/json'
-        return resp
-
-    return jsonify(task_id=async_result.id)
 
 
 # errorhandler: ProgAbort
